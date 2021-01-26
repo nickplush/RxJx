@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Course} from "../model/course";
-import {interval, noop, Observable, of, timer} from 'rxjs';
+import {interval, noop, Observable, of, throwError, timer} from 'rxjs';
 import {catchError, delayWhen, map, retryWhen, shareReplay, tap} from 'rxjs/operators';
 import {createHttpObservable} from "../common/util";
 
@@ -21,15 +21,18 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    const http$ =
-      createHttpObservable('/api/courses')
+    const http$ = createHttpObservable('/api/courses')
+
     const courses$: Observable<Course[]> = http$
       .pipe(
-        tap(()=>console.log('aaa')),
+        tap(() => console.log('aaa')),
         map(res => Object.values(res['payload'])),
-        shareReplay()
+        shareReplay(),
+        retryWhen(errors => errors.pipe(
+          delayWhen(()=>(timer(200)))
+          )
+        )
       )
-
 
     this.beginnerCourses$ = courses$
       .pipe(
@@ -42,7 +45,6 @@ export class HomeComponent implements OnInit {
         map(courses => courses
           .filter(course => course.category == 'ADVANCED'))
       );
-
 
 
   }
