@@ -41,7 +41,7 @@ export const COURSES: any = {
     },
     4: {
         id: 4,
-        description: 'Angular NgRx Store Reactive Extensions Architecture Course',
+        description: 'Angular NgRx StoreService Reactive Extensions Architecture Course',
         longDescription: "Learn how to the Angular NgRx Reactive Extensions and its Tooling to build a complete application.",
         iconUrl: 'https://angular-academy.s3.amazonaws.com/thumbnails/ngrx-angular.png',
         courseListIcon: 'https://angular-academy.s3.amazonaws.com/thumbnails/ngrx-small.png',
