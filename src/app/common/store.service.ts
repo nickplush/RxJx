@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {BehaviorSubject, Observable, timer} from "rxjs";
 import {Course} from "../model/course";
 import {createHttpObservable} from "./util";
-import {delayWhen, map, retryWhen, shareReplay, tap} from "rxjs/operators";
+import {delayWhen, filter, map, retryWhen, shareReplay, tap} from "rxjs/operators";
 import {fromPromise} from "rxjs/internal-compatibility";
 
 @Injectable({
@@ -26,6 +26,7 @@ export class Store {
         courses=> this.subject$.next(courses)
       )
   }
+
 
   selectBeginnerCourses() {
     return this.filterByCategory('BEGINNER')
@@ -60,4 +61,11 @@ export class Store {
       }}))
   }
 
+  selectCourseById(courseId: number) {
+    return this.courses$
+      .pipe(
+        map(courses => courses.find(course => course.id == courseId)),
+          filter(course => !!course)
+      );
+  }
 }
